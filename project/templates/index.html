@@ -21,29 +21,65 @@
             align-items: center;
         }
 
-        nav img {
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-container img {
             width: 50px;
             height: auto;
         }
 
+        .logo-container span {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00b3b3; /* Bright teal */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6); /* Optional shadow */
+        }
+
         nav ul {
             list-style: none;
-            display: flex;
-            gap: 30px;
+            display: flex; /* Align items in a row */
+            gap: 20px; /* Space between items */
+            margin: 0;
+            padding: 0;
         }
 
         nav ul li {
-            display: inline;
+            display: inline-block; /* Keep items inline */
         }
 
         nav ul li a {
             text-decoration: none;
             color: #fff;
             font-weight: bold;
+            padding: 10px 20px;
+            border: 2px solid transparent; /* Transparent border by default */
+            border-radius: 5px;
+            transition: all 0.3s ease;
         }
 
         nav ul li a:hover {
-            text-decoration: underline;
+            border: 2px solid #00b3b3; /* Teal outline on hover */
+            color: #00b3b3; /* Teal text on hover */
+        }
+
+        nav ul li .btn {
+            border: 2px solid #00b3b3; /* Teal outline */
+            color: #00b3b3; /* Teal text */
+            background-color: transparent;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        nav ul li .btn:hover {
+            background-color: #00b3b3; /* Teal background on hover */
+            color: #fff; /* White text on hover */
         }
 
         .hero {
@@ -103,15 +139,20 @@
 <body>
     <!-- Navigation Bar -->
     <nav>
-        <img src="/static/images/Serendipity_logo.jpg" alt="DataSerendipity Logo">
+        <div class="logo-container">
+            <img src="/static/images/Serendipity_logo.jpg" alt="DataSerendipity Logo">
+            <span>DataSerendipity</span>
+        </div>
         <ul>
-            <li><a href="#about">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#gallery">Gallery</a></li>
-            <li><a href="#contact" class="btn btn-outline-light">Contact</a></li>
+            <li><a href="#home" class="btn">Home</a></li>
+            <li><a href="#about" class="btn">About</a></li>
+            <li><a href="#services" class="btn">Services</a></li>
+            <li><a href="#gallery" class="btn">Gallery</a></li>
+            <li><a href="#contact" class="btn">Contact</a></li>
         </ul>
     </nav>
+
+
 
     <!-- Hero Section -->
     <section class="hero">
