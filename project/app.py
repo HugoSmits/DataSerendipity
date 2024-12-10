@@ -10,6 +10,10 @@ DATA_FILE = "data.csv"
 def home():
     return render_template("index.html")
 
+@app.route("/contact")
+def contact():
+    return render_template("contact.html")  # Serve contact.html
+
 @app.route("/data")
 def data():
     # Load and manipulate data
