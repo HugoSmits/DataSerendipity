@@ -14,6 +14,10 @@ def home():
 def contact():
     return render_template("contact.html")  # Serve contact.html
 
+@app.route("/about")
+def about():
+    return render_template("about.html")  # Serve contact.html
+
 @app.route("/data")
 def data():
     # Load and manipulate data
