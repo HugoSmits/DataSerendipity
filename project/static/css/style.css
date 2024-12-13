@@ -1,10 +1,9 @@
-/* style.css */
+/* General Body Styling */
 body {
-    font-family: 'Arial', sans-serif;
     margin: 0;
-    padding: 0;
-    background-color: #f8f9fa; /* Light background */
-    color: #333;
+    font-family: 'Arial', sans-serif;
+    color: #fff;
+    background-color: #1b1f22;
 }
 
 /* Navigation Bar Styling */
@@ -48,15 +47,92 @@ nav ul li {
 
 nav ul li a {
     text-decoration: none;
-    color: #fff;
+    color: #00b3b3; /* Teal text for better visibility */
     font-weight: bold;
     padding: 10px 20px;
-    border: 2px solid transparent;
+    border: 2px solid #00b3b3; /* Teal border for consistency */
     border-radius: 5px;
     transition: all 0.3s ease;
+    background-color: transparent; /* Ensure background is transparent */
 }
 
 nav ul li a:hover {
-    border: 2px solid #00b3b3;
+    background-color: #00b3b3; /* Teal background on hover */
+    color: #fff; /* White text on hover */
+}
+
+
+/* Hero Section Styling */
+.hero {
+    position: relative;
+    text-align: center;
+    height: 100vh;
+    background: url('/static/images/front_page_first_background.jpg') no-repeat center center/cover;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: auto;
+    text-align: center;
+    padding-top: 200px;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    font-weight: 300;
+    color: #ddd;
+    margin-bottom: 30px;
+}
+
+.hero-content .btn {
+    background-color: #28a745;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1rem;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.hero-content .btn:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Footer Styling */
+footer {
+    background-color: #0f1719;
+    padding: 20px;
+    text-align: center;
+    color: #fff;
+    margin-top: 50px;
+}
+
+footer a {
     color: #00b3b3;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
 }
