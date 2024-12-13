@@ -1,0 +1,70 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.about-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 50px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.text-section {
+    flex: 1 1 50%;
+    padding: 20px;
+}
+
+.text-section h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #000;
+}
+
+.text-section h1 span {
+    color: #28a745; /* Green accent for "Unlocking Insights" */
+}
+
+.text-section p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.text-section a {
+    color: #007bff;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.text-section a:hover {
+    text-decoration: underline;
+}
+
+.image-section {
+    flex: 1 1 45%;
+    padding: 20px;
+}
+
+.image-section img {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+    .about-container {
+        flex-direction: column;
+    }
+
+    .text-section, .image-section {
+        flex: 1 1 100%;
+    }
+}

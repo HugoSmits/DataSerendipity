@@ -1,0 +1,62 @@
+/* General Body Styling */
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    color: #fff;
+    background-color: #1b1f22;
+}
+
+/* Hero Section Styling */
+.hero {
+    position: relative;
+    text-align: center;
+    height: 100vh;
+    background: url('/static/images/front_page_first_background.jpg') no-repeat center center/cover;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: auto;
+    text-align: center;
+    padding-top: 200px;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    font-weight: 300;
+    color: #ddd;
+    margin-bottom: 30px;
+}
+
+.hero-content .btn {
+    background-color: #28a745;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1rem;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.hero-content .btn:hover {
+    background-color: #218838;
+}
