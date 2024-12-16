@@ -15,3 +15,7 @@ On Windows in Shell:
 - - python app.py
 
 
+## To Do
+- Implement the old project about the analysis of the Dutch Stock Exchange
+
+
