@@ -66,3 +66,30 @@ nav ul li .btn:hover {
     background-color: #00b3b3;
     color: #fff;
 }
+
+.gallery-menu {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.tab-button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #00b3b3;
+    color: white;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.tab-button:hover {
+    background-color: #008080;
+}
+
+.tab-content {
+    display: none;
+    padding: 20px;
+    text-align: center;
+}

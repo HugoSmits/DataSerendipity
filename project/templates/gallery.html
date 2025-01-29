@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DataSerendipity - Plinko Game</title>
+    <title>DataSerendipity - Gallery</title>
     <link rel="stylesheet" href="/static/css/navigation_style.css">
     <link rel="stylesheet" href="/static/css/gallery_style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/p5.min.js"></script>
@@ -24,12 +24,33 @@
         </ul>
     </nav>
 
-    <!-- Plinko Game -->
-    <section class="plinko-game">
-        <h1>Interactive Plinko Game</h1>
-        <div id="plinko-container"></div>
+    <!-- Sub-menu for Gallery -->
+    <div class="gallery-menu">
+        <button class="tab-button" onclick="showTab('gallery-content')">Gallery</button>
+        <button class="tab-button" onclick="showTab('plinko-content')">Plinko Game</button>
+    </div>
+
+    <!-- Gallery Content -->
+    <section id="gallery-content" class="tab-content">
+        <h1>Image Gallery</h1>
+        <div class="gallery-grid">
+            <!-- Add images here -->
+        </div>
     </section>
 
-    <script src="/static/js/plinko.js"></script>
+    <!-- Plinko Game Content -->
+    <section id="plinko-content" class="tab-content" style="display:none;">
+        <h1>Interactive Plinko Game</h1>
+        <div id="plinko-container"></div>
+        <script src="/static/js/plinko.js"></script>
+    </section>
+
+    <script>
+        function showTab(tabId) {
+            document.getElementById('gallery-content').style.display = 'none';
+            document.getElementById('plinko-content').style.display = 'none';
+            document.getElementById(tabId).style.display = 'block';
+        }
+    </script>
 </body>
 </html>
