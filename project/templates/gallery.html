@@ -20,6 +20,12 @@
             <li><a href="/about" class="btn">About</a></li>
             <li><a href="/services" class="btn">Services</a></li>
             <li><a href="/gallery" class="btn">Gallery</a></li>
+            <li class="dropdown">
+                <a href="/games" class="btn">Games ▼</a>
+                <ul class="dropdown-menu">
+                    <li><a href="/games/plinko">Plinko</a></li>
+                </ul>
+            </li>
             <li><a href="/contact" class="btn">Contact</a></li>
         </ul>
     </nav>
@@ -27,7 +33,6 @@
     <!-- Sub-menu for Gallery -->
     <div class="gallery-menu">
         <button class="tab-button" onclick="showTab('ticker-content')">AEX Tickers</button>
-        <button class="tab-button" onclick="showTab('plinko-content')">Plinko Game</button>
     </div>
 
     <!-- AEX Ticker Dashboard -->
@@ -68,21 +73,9 @@
     document.addEventListener("DOMContentLoaded", fetchTickers);
     </script>
 
-
-
-
-
-    <!-- Plinko Game Content -->
-    <section id="plinko-content" class="tab-content" style="display:none;">
-        <h1>Interactive Plinko Game</h1>
-        <div id="plinko-container"></div>
-        <script src="/static/js/plinko.js"></script>
-    </section>
-
     <script>
         function showTab(tabId) {
             document.getElementById('ticker-content').style.display = 'none';
-            document.getElementById('plinko-content').style.display = 'none';
             document.getElementById(tabId).style.display = 'block';
         }
     </script>

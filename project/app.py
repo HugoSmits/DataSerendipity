@@ -69,6 +69,14 @@ def services():
 def gallery():
     return render_template("gallery.html")  # Serve contact.html
 
+@app.route("/games")
+def games():
+    return render_template("games.html")  # New Games Page
+
+@app.route("/games/plinko")
+def plinko():
+    return render_template("plinko.html")  # Plinko subpage
+
 @app.route("/contact")
 def contact():
     return render_template("contact.html")  # Serve contact.html
