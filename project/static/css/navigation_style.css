@@ -52,14 +52,14 @@ nav ul li a:hover {
 }
 
 nav ul li .btn {
-    border: 2px solid #00b3b3;
-    color: #00b3b3;
-    background-color: transparent;
-    padding: 10px 20px;
-    font-size: 1rem;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: all 0.3s ease;
+    border: 2px solid #00b3b3 !important;
+    color: #00b3b3 !important;
+    background-color: transparent !important;
+    padding: 10px 20px !important;
+    font-size: 1rem !important;
+    border-radius: 5px !important;
+    text-decoration: none !important;
+    transition: all 0.3s ease !important;
 }
 
 nav ul li .btn:hover {
