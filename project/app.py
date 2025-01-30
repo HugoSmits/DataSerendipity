@@ -7,11 +7,14 @@ import time
 import threading
 import datetime
 import os
+import yfinance as yf
 
 app = Flask(__name__)
 
 # File to store the tickers
 DATA_FILE = "aex_tickers.csv"
+OUTPUT_DIRECTORY = "aex_data/"
+LOG_FILE = "stock_download_log.csv"
 
 def fetch_aex_tickers():
     """Fetch AEX tickers from Wikipedia and save to CSV."""
@@ -26,24 +29,82 @@ def fetch_aex_tickers():
             table = tables[1]
             rows = table.find_all("tr")
 
-            tickers = [cell.text.strip() for row in rows[1:] for cell in row.find_all("td")]
+            tickers = []
+            for row in rows[1:]:  # Skip header row
+                cells = row.find_all("td")
+                if cells:
+                    ticker = cells[0].text.strip()
+                    tickers.append(ticker)
 
-            # Format last fetched timestamp as DD/MM/YYYY
+            # Format last fetched timestamp
             last_fetched = datetime.datetime.now().strftime("%H:%M:%S - %d/%m/%Y ")
 
-            # Create DataFrame with two columns
+            # Create DataFrame
             df = pd.DataFrame({"Ticker Symbol": tickers, "Last Updated": [last_fetched] * len(tickers)})
+            
+            # Remove any non-ticker rows
+            df = df[df["Ticker Symbol"].str.match(r'^[A-Z0-9]+$', na=False)]
 
             df.to_csv(DATA_FILE, index=False)
+
             print(f"✅ AEX tickers updated successfully at {last_fetched}")
+
         else:
             print("⚠️ Second table not found.")
     else:
         print("❌ Failed to retrieve data from Wikipedia.")
 
 
-# Schedule the function to run once a day
-schedule.every().day.at("02:00").do(fetch_aex_tickers)  # Runs at 2 AM daily
+def fetch_aex_stock_data(df):
+    """Fetch historical stock data for AEX tickers and save to CSV."""
+    aex_stocks = df["Ticker Symbol"].tolist()
+    aex_exchange_symbol = ".AS"  # Amsterdam exchange suffix
+
+    failed_stocks = []
+    log_data = []
+
+    # ✅ Ensure the directory exists before downloading files
+    if not os.path.exists(OUTPUT_DIRECTORY):
+        os.makedirs(OUTPUT_DIRECTORY)
+        print(f"📂 Created directory: {OUTPUT_DIRECTORY}")
+
+    for stock in aex_stocks:
+        try:
+            # Fetch historical data
+            stock_data = yf.download(stock + aex_exchange_symbol, period='max')
+
+            if not stock_data.empty:
+                # Get available start and end dates
+                start_date = stock_data.index.min().strftime('%Y-%m-%d')
+                end_date = stock_data.index.max().strftime('%Y-%m-%d')
+
+                # Save dataframe to CSV
+                file_path = os.path.join(OUTPUT_DIRECTORY, f"{stock}_data_{start_date}_{end_date}.csv")
+                stock_data.to_csv(file_path)
+
+                # Log the download details
+                log_data.append([stock, start_date, end_date, datetime.datetime.now().strftime('%H:%M:%S - %Y-%m-%d')])
+
+                print(f"✅ Successfully downloaded and saved data for {stock}.")
+            else:
+                print(f"⚠️ Downloaded data for {stock} is empty.")
+                failed_stocks.append(stock)
+        except Exception as e:
+            print(f"❌ Failed to download data for {stock}: {e}")
+            failed_stocks.append(stock)
+
+    # Save logs
+    if log_data:
+        log_df = pd.DataFrame(log_data, columns=["Ticker Symbol", "Start Date", "End Date", "Downloaded At"])
+        log_df.to_csv(LOG_FILE, mode='a', header=True, index=False)
+
+    if failed_stocks:
+        print("⚠️ Failed to download data for the following stocks:", failed_stocks)
+
+# Schedule both updates to run daily at 2 AM
+schedule.every().day.at("02:00").do(fetch_aex_tickers)
+
+schedule.every().day.at("02:00").do(fetch_aex_stock_data) 
 
 def run_scheduler():
     while True:
@@ -81,10 +142,10 @@ def plinko():
 def contact():
     return render_template("contact.html")  # Serve contact.html
 
+#python -c "import app; app.fetch_aex_tickers()"
 @app.route("/api/tickers")
 def get_tickers():
     """Return tickers as JSON with correct column names."""
-    import os
     if not os.path.exists(DATA_FILE):  
         fetch_aex_tickers()
 
@@ -96,6 +157,28 @@ def get_tickers():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+#python -c "import app; app.fetch_aex_stock_data()"
+#python -c "import app; df = app.pd.read_csv('aex_tickers.csv'); app.fetch_aex_stock_data(df)"
+@app.route("/api/stock_data")
+def get_stock_data():
+    """Return stock data download logs as JSON."""
+    try:
+        # Ensure file exists before reading
+        if not os.path.exists("stock_download_log.csv"):
+            return jsonify({"error": "Stock download log file does not exist"}), 404
+
+        # Read and return data
+        df = pd.read_csv(LOG_FILE)
+
+        # Ensure the CSV has the correct columns
+        if df.empty or "Ticker Symbol" not in df.columns:
+            return jsonify({"error": "No stock data found"}), 404
+
+        stocks_data = df.to_dict(orient="records")
+        return jsonify(stocks_data)
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)

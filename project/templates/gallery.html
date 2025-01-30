@@ -33,6 +33,7 @@
     <!-- Sub-menu for Gallery -->
     <div class="gallery-menu">
         <button class="tab-button" onclick="showTab('ticker-content')">AEX Tickers</button>
+        <button class="tab-button" onclick="showTab('stock-data')">Stocks Data</button>
     </div>
 
     <!-- AEX Ticker Dashboard -->
@@ -75,9 +76,70 @@
 
     <script>
         function showTab(tabId) {
+            // Hide both sections first
             document.getElementById('ticker-content').style.display = 'none';
+            document.getElementById('stock-data').style.display = 'none';
+
+            // Show the selected section
             document.getElementById(tabId).style.display = 'block';
         }
+
+        // Ensure both sections are hidden when the page first loads
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("ticker-content").style.display = "none";
+            document.getElementById("stock-data").style.display = "none";
+        });
+
     </script>
+
+    <!-- Stock Data Download Table -->
+    <section id="stock-data" class="tab-content">
+        <h1>AEX Stock Data Download History</h1>
+        <div class="stock-dashboard">
+            <div class="table-container">
+                <table id="stock-data-table">
+                    <thead>
+                        <tr>
+                            <th>Ticker Symbol</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Downloaded At</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <script>
+    function fetchStockData() {
+    fetch('/api/stock_data')
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.querySelector('#stock-data-table tbody');
+            tableBody.innerHTML = "";
+
+            if (data.error) {
+                console.error("API Error:", data.error);
+                return;
+            }
+
+            data.forEach(entry => {
+                let row = document.createElement('tr');
+                row.innerHTML = `<td>${entry["Ticker Symbol"] || "N/A"}</td>
+                                 <td>${entry["Start Date"] || "N/A"}</td>
+                                 <td>${entry["End Date"] || "N/A"}</td>
+                                 <td>${entry["Downloaded At"] || "N/A"}</td>`;
+                tableBody.appendChild(row);
+            });
+        })
+        .catch(error => console.error('Error fetching stock data:', error));
+    }
+
+    // Fetch stock data on page load
+    document.addEventListener("DOMContentLoaded", fetchStockData);
+    </script>
+
 </body>
 </html>

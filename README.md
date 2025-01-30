@@ -19,4 +19,7 @@ On Windows in Shell:
 - Implement the old project about the analysis of the Dutch Stock Exchange
 - Create visual dashboard with it.
 
+- Check why not all the tickers are shown...
+- Create an update Info button at each dashboard.
+
 
