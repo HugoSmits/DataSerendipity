@@ -7,6 +7,7 @@ import time
 import threading
 import datetime
 import os
+import glob
 import yfinance as yf
 
 app = Flask(__name__)
@@ -179,6 +180,78 @@ def get_stock_data():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+
+@app.route("/api/stocks_from_data")
+def get_stocks_from_data():
+    """Return tickers listed in the Stock Data table."""
+    try:
+        # Get stock files (ensure filenames match ticker names)
+        stock_files = [
+            file.split("_data_")[0] for file in os.listdir(OUTPUT_DIRECTORY) if file.endswith(".csv")
+        ]
+        return jsonify(sorted(set(stock_files)))  # Unique tickers in sorted order
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+
+@app.route("/api/available_tickers")
+def get_available_tickers():
+    """Return only tickers that have actual data files."""
+    available_tickers = set()
+
+    if not os.path.exists(OUTPUT_DIRECTORY):
+        return jsonify([])  # Return an empty list if directory does not exist
+
+    csv_files = glob.glob(os.path.join(OUTPUT_DIRECTORY, "*_data_*.csv"))
+    for file in csv_files:
+        filename = os.path.basename(file)  # Get only filename (no path)
+        ticker = filename.split("_data_")[0]  # Extract ticker symbol
+        available_tickers.add(ticker)
+
+    return jsonify(sorted(available_tickers))  # Ensure sorted unique list
+
+
+@app.route("/api/stock_data/<ticker>")
+def get_stock_data_by_ticker(ticker):
+    """Load stock data and return valid JSON response."""
+    matching_files = [
+        file for file in os.listdir(OUTPUT_DIRECTORY) if file.startswith(f"{ticker}_data_")
+    ]
+
+    if not matching_files:
+        return jsonify({"error": "No stock data found"}), 404
+
+    latest_file = sorted(matching_files)[-1]
+
+    try:
+        df = pd.read_csv(os.path.join(OUTPUT_DIRECTORY, latest_file), skiprows=2)
+
+        # ✅ Debugging Step: Print column names
+        print("🔍 DataFrame Columns:", df.columns.tolist())
+
+        # ✅ Ensure correct column names
+        expected_columns = ["Date", "Close", "High", "Low", "Open", "Volume"]
+        df.columns = expected_columns
+
+        # ✅ Fix Date Parsing
+        df["Date"] = pd.to_datetime(df["Date"], errors="coerce").dt.strftime("%Y-%m-%d")
+
+        # ✅ Convert numeric columns
+        for col in ["Close", "High", "Low", "Open", "Volume"]:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+
+        # ✅ Drop rows with NaN values
+        df = df.dropna()
+
+        return jsonify(df.to_dict(orient="records"))
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 if __name__ == "__main__":
     app.run(debug=True)
