@@ -6,7 +6,7 @@ body {
 }
 
 /* Center the table container */
-.ticker-dashboard, .stock-dashboard {
+.ticker-dashboard, .stock-dashboard, .chart-dashboard {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -75,3 +75,44 @@ body {
         font-size: 0.9em;
     }
 }
+
+#stock-chart-selector {
+    padding: 10px;
+    font-size: 1rem;
+    margin: 10px auto;
+    border-radius: 5px;
+}
+
+#chart-output {
+    margin-top: 20px;
+    width: 80%;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#chart-output canvas {
+    width: 100%;
+    height: 100%;
+}
+
+.chart-container {
+    margin-top: 20px;
+    text-align: center;
+    padding: 20px;
+    background: white;
+    color: black;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 900px;
+    height: 500px;
+}
+
+#year-selector {
+    margin-bottom: 15px;
+    padding: 5px;
+    font-size: 16px;
+}
+
+

@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/static/css/navigation_style.css">
     <link rel="stylesheet" href="/static/css/gallery_style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/p5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -34,6 +35,7 @@
     <div class="gallery-menu">
         <button class="tab-button" onclick="showTab('ticker-content')">AEX Tickers</button>
         <button class="tab-button" onclick="showTab('stock-data')">Stocks Data</button>
+        <button class="tab-button" onclick="showTab('stock-chart')">Stock Charts</button>
     </div>
 
     <!-- AEX Ticker Dashboard -->
@@ -53,44 +55,6 @@
             </div>
         </div>
     </section>
-
-    <script>
-    function fetchTickers() {
-        fetch('/api/tickers')
-            .then(response => response.json())
-            .then(data => {
-                const tableBody = document.querySelector('#ticker-table tbody');
-                tableBody.innerHTML = ""; 
-
-                data.forEach(entry => {
-                    let row = document.createElement('tr');
-                    row.innerHTML = `<td>${entry["Ticker Symbol"]}</td><td>${entry["Last Updated"]}</td>`;
-                    tableBody.appendChild(row);
-                });
-            })
-            .catch(error => console.error('Error fetching tickers:', error));
-    }
-
-    document.addEventListener("DOMContentLoaded", fetchTickers);
-    </script>
-
-    <script>
-        function showTab(tabId) {
-            // Hide both sections first
-            document.getElementById('ticker-content').style.display = 'none';
-            document.getElementById('stock-data').style.display = 'none';
-
-            // Show the selected section
-            document.getElementById(tabId).style.display = 'block';
-        }
-
-        // Ensure both sections are hidden when the page first loads
-        document.addEventListener("DOMContentLoaded", function() {
-            document.getElementById("ticker-content").style.display = "none";
-            document.getElementById("stock-data").style.display = "none";
-        });
-
-    </script>
 
     <!-- Stock Data Download Table -->
     <section id="stock-data" class="tab-content">
@@ -112,34 +76,33 @@
         </div>
     </section>
 
-    <script>
-    function fetchStockData() {
-    fetch('/api/stock_data')
-        .then(response => response.json())
-        .then(data => {
-            const tableBody = document.querySelector('#stock-data-table tbody');
-            tableBody.innerHTML = "";
+    <!-- Stock Chart Section -->
+    <section id="stock-chart" class="tab-content">
+        <h1>Stock Charts</h1>
+        <div class="chart-dashboard">
+            <div class="chart-container">
+                <p>Select a stock to view the chart</p>
+                <select id="stock-chart-selector" onchange="fetchStockChart(this.value)">
+                    <option value="">-- Select a Stock --</option>
+                </select>
+                <div>
+                    <label for="year-selector">Select Year:</label>
+                    <select id="year-selector"></select>
+                </div>
+                <div class="chart-container">
+                    <canvas id="stockChart"></canvas>
+                </div>
 
-            if (data.error) {
-                console.error("API Error:", data.error);
-                return;
-            }
 
-            data.forEach(entry => {
-                let row = document.createElement('tr');
-                row.innerHTML = `<td>${entry["Ticker Symbol"] || "N/A"}</td>
-                                 <td>${entry["Start Date"] || "N/A"}</td>
-                                 <td>${entry["End Date"] || "N/A"}</td>
-                                 <td>${entry["Downloaded At"] || "N/A"}</td>`;
-                tableBody.appendChild(row);
-            });
-        })
-        .catch(error => console.error('Error fetching stock data:', error));
-    }
+                <div id="chart-output">
+                <!-- Chart will render here -->
+                </div>
+            </div>
+        </div>
+    </section>
 
-    // Fetch stock data on page load
-    document.addEventListener("DOMContentLoaded", fetchStockData);
-    </script>
+<!-- ✅ Load script at the end of the body -->
+<script src="/static/js/gallery_script.js"></script>
 
 </body>
 </html>
